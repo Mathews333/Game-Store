@@ -1,0 +1,116 @@
+{% comment %} {% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Game Store</title>
+    <link rel="stylesheet" href="{% static 'viewgame.css' %}">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <img src="{% static 'image/logo.png' %}" class="logo">
+    <a href="#" class="nav-link">Store</a>
+    <a href="#" class="nav-link">Library</a>
+</nav>
+
+<!-- GAME GRID -->
+<div class="game-container">
+    {% for game in games %}
+    <div class="game-card">
+
+        <a href="{% url 'game_detail' game.id %}">
+            <img src="{{ game.game_image.url }}" class="game-img">
+        </a>
+
+        <h3>{{ game.name }}</h3>
+        <p class="price">₹{{ game.game_price }}</p>
+
+    </div>
+    {% endfor %}
+</div>
+
+</body>
+</html> {% endcomment %}
+
+{% comment %} -------------------------------- {% endcomment %}
+
+{% comment %} {% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Game Store</title>
+    <link rel="stylesheet" href="{% static 'user/viewgame.css' %}">
+</head>
+<body>
+
+<nav class="navbar">
+    <img src="{% static 'image/logo.png' %}" class="logo">
+    <a href="{% url 'view_game' %}">Store</a>
+</nav>
+
+<div class="game-container">
+    {% for game in games %}
+    <div class="game-card">
+
+        <a href="{% url 'game_detail' game.id %}">
+            <img src="{{ game.game_image.url }}" class="game-img">
+        </a>
+
+        <h3>{{ game.name }}</h3>
+        <p class="price">₹{{ game.game_price }}</p>
+
+    </div>
+    {% endfor %}
+</div>
+
+</body>
+</html> {% endcomment %}
+
+{% comment %} ----------- {% endcomment %}
+
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Game Store</title>
+    <link rel="stylesheet" href="{% static 'user/viewgame.css' %}">
+</head>
+<body>
+
+<h1 class="store-title">Store</h1>
+
+<div class="game-container">
+    {% for game in games %}
+    <div class="game-card">
+
+        <!-- GAME IMAGE (CLICKABLE) -->
+        <a href="{% url 'game_detail' game.id %}">
+            <img src="{{ game.game_image.url }}" class="game-img">
+        </a>
+
+        <!-- GAME DETAILS -->
+        <div class="game-info">
+            <h3 class="game-name">{{ game.name }}</h3>
+
+            <p class="game-category">
+                {{ game.get_category_display }}
+            </p>
+
+            <p class="game-desc">
+                {{ game.description|truncatechars:80 }}
+            </p>
+
+            <p class="game-price">₹{{ game.game_price }}</p>
+
+                    <button class="buy">Buy</button>
+                    <button class="wishlist">Wishlist</button>
+            </a>
+        </div>
+
+    </div>
+    {% endfor %}
+</div>
+
+</body>
+</html>

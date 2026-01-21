@@ -1,0 +1,52 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Game Store</title>
+    <link rel="stylesheet" href="{% static 'userpage.css' %}">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<header class="navbar">
+    <div class="logo">🎮 GameStore</div>
+    <nav>
+        <a href="#">Store</a>
+        <a href="#">Library</a>
+        <a href="{% url 'user_profile' %}">Profile</a>
+        <a href="{% url 'login' %}" class="logout">Logout</a>
+    </nav>
+</header>
+
+<!-- MAIN CONTENT -->
+<main class="container">
+    <h2 class="title">Featured Games</h2>
+
+    <div class="game-grid">
+        {% for game in products %}
+        <div class="game-card">
+            {% if game.game_image %}
+                <a href="{% url 'game_detail' game.id %}"><img src="{{ game.game_image.url }}" alt="{{ game.name }}"></a>
+            {% else %}
+                <img src="{% static 'media/default_game.jpg' %}" alt="Game">
+            {% endif %}
+
+            <div class="game-info">
+                <h3>{{ game.name }}</h3>
+                <p class="category">{{ game.category }}</p>
+                <p class="price">₹ {{ game.game_price }}</p>
+
+                <div class="buttons">
+
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p>No games available.</p>
+        {% endfor %}
+    </div>
+</main>
+
+</body>
+</html>

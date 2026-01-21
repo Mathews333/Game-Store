@@ -1,0 +1,32 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Profile</title>
+    <link rel="stylesheet" href="{% static 'user/profile.css' %}">
+</head>
+<body>
+
+<h2>My Profile</h2>
+
+<div class="profile-card">
+    <img src="{{ profile.profile_image.url }}" class="avatar">
+
+    <h3>{{ profile.user.username }}</h3>
+    <p>{{ profile.user.email }}</p>
+
+    <p class="bio">
+        {{ profile.bio|default:"No bio available." }}
+    </p>
+</div>
+
+<hr>
+
+<div class="profile-links">
+    <a href="{% url 'view_cart' %}">🛒 My Cart</a>
+    <a href="{% url 'view_wishlist' %}">❤️ My Wishlist</a>
+    <a href="{% url 'userpage' %}">🎮 Store</a>
+</div>
+
+</body>
+</html>

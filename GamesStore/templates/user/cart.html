@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Cart</title>
+</head>
+<body>
+
+<h2>🛒 My Cart</h2>
+
+{% if items %}
+<table border="1" cellpadding="10">
+    <tr>
+        <th>Game</th>
+        <th>Price</th>
+        <th>Action</th>
+    </tr>
+
+    {% for item in items %}
+    <tr>
+        <td>{{ item.game.name }}</td>
+        <td>₹{{ item.game.game_price }}</td>
+        <td>
+            <a href="{% url 'remove_from_cart' item.game.id %}">Remove</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% else %}
+<p>Your cart is empty.</p>
+{% endif %}
+
+<br>
+<a href="{% url 'userpage' %}">⬅ Back to Store</a>
+
+</body>
+</html>

@@ -1,0 +1,25 @@
+body {
+    background: #0f1722;
+    color: #c7d5e0;
+    font-family: Arial, sans-serif;
+    padding: 40px;
+}
+
+.profile-card {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
+
+.profile-links a {
+    display: inline-block;
+    margin-right: 15px;
+    color: #66c0f4;
+    text-decoration: none;
+}

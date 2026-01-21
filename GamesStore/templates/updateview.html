@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Product</title>
+    <link rel="stylesheet" href="{% static 'updateproduct.css' %}">
+</head>
+<body>
+
+<div class="update-container">
+    <h2>Update Product</h2>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <input type="text" name="name" value="{{ product.name }}" placeholder="Name">
+        <input type="text" name="category" value="{{ product.category }}" placeholder="Category">
+        <input type="text" name="description" value="{{ product.description }}" placeholder="Description">
+        <input type="number" name="game_price" value="{{ product.game_price }}">
+        <input type="file" name="game_image">
+        <label>Update Trailer</label>
+<input type="file" name="trailer" accept="video/mp4">
+
+
+        <input type="submit" value="Update">
+    </form>
+</div>
+
+</body>
+</html>

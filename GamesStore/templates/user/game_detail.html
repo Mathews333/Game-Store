@@ -1,0 +1,126 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ game.name }}</title>
+    <link rel="stylesheet" href="{% static 'user/gamedetail.css' %}">
+</head>
+<body>
+
+<div class="game-detail-container">
+
+    <!-- LEFT PANEL -->
+    <div class="left-panel">
+
+        {% if game.game_logo %}
+        <img src="{{ game.game_logo.url }}" class="game-logo">
+        {% endif %}
+
+        <!-- ACTION BUTTONS -->
+        <div class="action-buttons">
+            <a href="{% url 'add_to_cart' game.id %}">
+    <button class="buy-btn">Add to Cart</button>
+</a>
+
+<a href="{% url 'add_to_wishlist' game.id %}">
+    <button class="wishlist-btn">Wishlist</button>
+</a>
+
+
+        </div>
+
+        <!-- DESCRIPTION UNDER LOGO -->
+        <p class="description">
+            {{ game.description }}
+        </p>
+
+        <!-- SCREENSHOT THUMBNAILS -->
+    <div class="thumbnail-row">
+
+    <!-- TRAILER THUMB -->
+    {% if game.trailer %}
+    <div class="video-thumb" onclick="showVideo()">
+        ▶ Trailer
+    </div>
+    {% endif %}
+
+    {% if game.game_image %}
+    <img src="{{ game.game_image.url }}" onclick="showImage(this.src)">
+    {% endif %}
+
+    {% if game.screenshot1 %}
+    <img src="{{ game.screenshot1.url }}" onclick="showImage(this.src)">
+    {% endif %}
+
+    {% if game.screenshot2 %}
+    <img src="{{ game.screenshot2.url }}" onclick="showImage(this.src)">
+    {% endif %}
+
+    {% if game.screenshot3 %}
+    <img src="{{ game.screenshot3.url }}" onclick="showImage(this.src)">
+    {% endif %}
+
+    {% if game.screenshot4 %}
+    <img src="{{ game.screenshot4.url }}" onclick="showImage(this.src)">
+    {% endif %}
+
+</div>
+
+
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="right-panel">
+
+    <!-- IMAGE PREVIEW -->
+    <img id="mainImage"
+         src="{{ game.game_image.url }}"
+         class="main-preview">
+
+    <!-- VIDEO PREVIEW (HIDDEN INITIALLY) -->
+    {% if game.trailer %}
+    <video id="mainVideo"
+           class="main-preview"
+           controls
+           style="display:none;">
+        <source src="{{ game.trailer.url }}" type="video/mp4">
+    </video>
+    {% endif %}
+
+    <p class="price">₹ {{ game.game_price }}</p>
+</div>
+
+
+</div>
+
+<!-- JS (VERY SMALL) -->
+<script>
+function showImage(src) {
+    const img = document.getElementById("mainImage");
+    const video = document.getElementById("mainVideo");
+
+    if (video) {
+        video.pause();
+        video.style.display = "none";
+    }
+
+    img.src = src;
+    img.style.display = "block";
+}
+
+function showVideo() {
+    const img = document.getElementById("mainImage");
+    const video = document.getElementById("mainVideo");
+
+    if (video) {
+        img.style.display = "none";
+        video.style.display = "block";
+        video.play();
+    }
+}
+</script>
+
+
+</body>
+</html>
+
