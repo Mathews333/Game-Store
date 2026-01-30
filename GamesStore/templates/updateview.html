@@ -3,27 +3,78 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Update Product</title>
+    <title>Update Game</title>
     <link rel="stylesheet" href="{% static 'updateproduct.css' %}">
 </head>
 <body>
 
 <div class="update-container">
-    <h2>Update Product</h2>
+    <h2>Update Game</h2>
 
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
 
-        <input type="text" name="name" value="{{ product.name }}" placeholder="Name">
-        <input type="text" name="category" value="{{ product.category }}" placeholder="Category">
-        <input type="text" name="description" value="{{ product.description }}" placeholder="Description">
-        <input type="number" name="game_price" value="{{ product.game_price }}">
-        <input type="file" name="game_image">
-        <label>Update Trailer</label>
-<input type="file" name="trailer" accept="video/mp4">
+        <input type="text" name="name" value="{{ product.name }}" placeholder="Game Name" required>
 
+        <select name="category">
+            <option value="{{ product.category }}" selected>
+                {{ product.get_category_display }}
+            </option>
+        </select>
 
-        <input type="submit" value="Update">
+        <textarea name="description" placeholder="Description">{{ product.description }}</textarea>
+
+        <input type="number" name="game_price" value="{{ product.game_price }}" required>
+
+        <hr>
+
+        <!-- GAME LOGO -->
+        <label>Game Logo</label><br>
+        {% if product.game_logo %}
+            <img src="{{ product.game_logo.url }}" height="80"><br>
+        {% endif %}
+        <input type="file" name="game_logo"><br><br>
+
+        <!-- MAIN IMAGE -->
+        <label>Main Image</label><br>
+        {% if product.game_image %}
+            <img src="{{ product.game_image.url }}" height="80"><br>
+        {% endif %}
+        <input type="file" name="game_image"><br><br>
+
+        <!-- SCREENSHOTS -->
+        <label>Screenshot 1</label><br>
+        {% if product.screenshot1 %}
+            <img src="{{ product.screenshot1.url }}" height="80"><br>
+        {% endif %}
+        <input type="file" name="screenshot1"><br><br>
+
+        <label>Screenshot 2</label><br>
+        {% if product.screenshot2 %}
+            <img src="{{ product.screenshot2.url }}" height="80"><br>
+        {% endif %}
+        <input type="file" name="screenshot2"><br><br>
+
+        <label>Screenshot 3</label><br>
+        {% if product.screenshot3 %}
+            <img src="{{ product.screenshot3.url }}" height="80"><br>
+        {% endif %}
+        <input type="file" name="screenshot3"><br><br>
+
+        <label>Screenshot 4</label><br>
+        {% if product.screenshot4 %}
+            <img src="{{ product.screenshot4.url }}" height="80"><br>
+        {% endif %}
+        <input type="file" name="screenshot4"><br><br>
+
+        <!-- TRAILER -->
+        <label>Game Trailer</label><br>
+        {% if product.trailer %}
+            <video src="{{ product.trailer.url }}" height="80" controls></video><br>
+        {% endif %}
+        <input type="file" name="trailer"><br><br>
+
+        <input type="submit" value="Update Game">
     </form>
 </div>
 

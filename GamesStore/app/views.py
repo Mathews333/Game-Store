@@ -74,10 +74,10 @@ def viewproductupdate(request, pk):
     product = get_object_or_404(gamedetails, pk=pk)
 
     if request.method == 'POST':
-        product.name = request.POST.get('name')
-        product.category = request.POST.get('category')
-        product.description = request.POST.get('description')
-        product.game_price = request.POST.get('game_price')
+        product.name = request.POST['name']
+        product.category = request.POST['category']
+        product.description = request.POST['description']
+        product.game_price = request.POST['game_price']
 
         if request.FILES.get('game_image'):
             product.game_image = request.FILES['game_image']
@@ -101,10 +101,10 @@ def viewproductupdate(request, pk):
             product.trailer = request.FILES['trailer']
 
         product.save()
-        messages.success(request, "Game updated successfully")
         return redirect('viewproduct')
 
     return render(request, 'updateview.html', {'product': product})
+
 
 
 def viewproductdelet(request, pk):

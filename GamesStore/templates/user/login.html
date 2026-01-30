@@ -2,35 +2,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>User Login</title>
-    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <title>Login</title>
+    <link rel="stylesheet" href="{% static 'user/login.css' %}">
 </head>
 <body>
 
-<div class="login-box">
-    <h2>🔐 Login</h2>
+<div class="auth-container">
+    <h2>Login</h2>
 
-    {% if messages %}
-        <ul class="messages">
-            {% for msg in messages %}
-                <li class="{{ msg.tags }}">{{ msg }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+    {% for message in messages %}
+        <div class="message">{{ message }}</div>
+    {% endfor %}
 
-    <form method="post" action="../">
+    <form method="post">
         {% csrf_token %}
-
-        <input type="text" name="username" placeholder="Enter Username" required>
-
-        <input type="password" name="password" placeholder="Enter Password" required>
-
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="password" name="password" placeholder="Password" required>
         <button type="submit">Login</button>
     </form>
 
-    <p>Don’t have an account?
-        <a href="./register">Register</a>
-    </p>
+    <div class="link">
+        Don’t have an account?
+        <a href="{% url 'register' %}">Register</a>
+    </div>
 </div>
 
 </body>
