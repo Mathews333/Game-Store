@@ -1,0 +1,65 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Purchase {{ game.name }}</title>
+    <link rel="stylesheet" href="{% static 'user/buy_now.css' %}">
+</head>
+<body>
+
+<header class="navbar">
+    <div class="logo">🎮 GameStore</div>
+    <nav>
+        <a href="{% url 'userpage' %}">Store</a>
+        <a href="{% url 'user_profile' %}">Profile</a>
+        <a href="{% url 'login' %}">Logout</a>
+    </nav>
+</header>
+
+<main class="checkout-wrapper">
+
+    <h1>Review your purchase</h1>
+
+    <div class="checkout-card">
+
+        <div class="game-info">
+            {% if game.game_logo %}
+                <img src="{{ game.game_logo.url }}" class="game-logo">
+            {% endif %}
+
+            <div class="details">
+                <h2>{{ game.name }}</h2>
+                <p>{{ game.description|truncatewords:30 }}</p>
+            </div>
+        </div>
+
+        <div class="summary">
+            <div class="row">
+                <span>Price</span>
+                <span>₹ {{ game.game_price }}</span>
+            </div>
+
+            <div class="row total">
+                <span>Total</span>
+                <span>₹ {{ game.game_price }}</span>
+            </div>
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="confirm-btn">
+                Complete Purchase
+            </button>
+        </form>
+
+        <a href="{% url 'game_detail' game.id %}" class="cancel">
+            Cancel & go back
+        </a>
+
+    </div>
+
+</main>
+
+</body>
+</html>

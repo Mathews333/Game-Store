@@ -1,0 +1,94 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Checkout | {{ game.name }}</title>
+    <link rel="stylesheet" href="{% static 'user/checkout.css' %}">
+</head>
+<body>
+
+<header class="navbar">
+    <div class="logo">🎮 GameStore</div>
+    <nav>
+        <a href="{% url 'userpage' %}">Store</a>
+        <a href="{% url 'user_profile' %}">Profile</a>
+        <a href="{% url 'login' %}">Logout</a>
+    </nav>
+</header>
+
+<main class="checkout-container">
+
+    <!-- LEFT -->
+    <section class="payment-section">
+        <h2>Checkout</h2>
+
+        <div class="payment-group">
+            <h4>Other Payment Methods</h4>
+
+            <label class="payment-option">
+                <input type="radio" name="payment" checked>
+                <span>💳 Credit / Debit Card</span>
+            </label>
+
+            <label class="payment-option">
+                <input type="radio" name="payment">
+                <span>🅿️ PayPal</span>
+            </label>
+
+            <label class="payment-option disabled">
+                <input type="radio" disabled>
+                <span>⭐ GameStore Rewards (Coming Soon)</span>
+            </label>
+        </div>
+    </section>
+
+    <!-- RIGHT -->
+    <aside class="summary-section">
+
+        <h3>Order Summary</h3>
+
+        <div class="summary-card">
+            <div class="game-row">
+                {% if game.game_logo %}
+                    <img src="{{ game.game_logo.url }}">
+                {% endif %}
+
+                <div>
+                    <strong>{{ game.name }}</strong>
+                    <p class="publisher">GameStore Studios</p>
+                </div>
+            </div>
+
+            <div class="price-row">
+                <span>Price</span>
+                <span>₹ {{ game.game_price }}</span>
+            </div>
+
+            <div class="price-row vat">
+                <span>VAT Included (18%)</span>
+                <span>—</span>
+            </div>
+
+            <div class="price-row total">
+                <span>Total</span>
+                <span>₹ {{ game.game_price }}</span>
+            </div>
+
+            <form method="post">
+                {% csrf_token %}
+                <button class="place-order">Place Order</button>
+            </form>
+
+            <p class="legal">
+                You are purchasing a digital license.
+                By placing this order, you agree to the EULA.
+            </p>
+        </div>
+
+    </aside>
+
+</main>
+
+</body>
+</html>

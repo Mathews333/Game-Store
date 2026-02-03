@@ -1,30 +1,48 @@
 {% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Login</title>
+    <meta charset="UTF-8">
+    <title>Login | Game Store</title>
     <link rel="stylesheet" href="{% static 'user/login.css' %}">
 </head>
 <body>
 
-<div class="auth-container">
-    <h2>Login</h2>
+<div class="auth-wrapper">
 
-    {% for message in messages %}
-        <div class="message">{{ message }}</div>
-    {% endfor %}
-
-    <form method="post">
-        {% csrf_token %}
-        <input type="text" name="username" placeholder="Username" required>
-        <input type="password" name="password" placeholder="Password" required>
-        <button type="submit">Login</button>
-    </form>
-
-    <div class="link">
-        Don’t have an account?
-        <a href="{% url 'register' %}">Register</a>
+    <!-- LEFT BRAND BANNER -->
+    <div class="auth-banner">
+        <div class="banner-content">
+            <h1 class="store-title">GAME STORE</h1>
+            <p class="tagline">Play. Own. Conquer.</p>
+            <p class="subtext">
+                Discover premium games, build your library,<br>
+                and experience next-gen gaming.
+            </p>
+        </div>
     </div>
+
+    <!-- RIGHT LOGIN PANEL -->
+    <div class="auth-container">
+        <h2>Login</h2>
+
+        {% for message in messages %}
+            <div class="message">{{ message }}</div>
+        {% endfor %}
+
+        <form method="post">
+            {% csrf_token %}
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+
+        <div class="link">
+            Don’t have an account?
+            <a href="{% url 'register' %}">Register</a>
+        </div>
+    </div>
+
 </div>
 
 </body>

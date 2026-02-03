@@ -1,32 +1,82 @@
 {% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>My Profile</title>
+    <meta charset="UTF-8">
+    <title>Your Profile | Game Store</title>
     <link rel="stylesheet" href="{% static 'user/profile.css' %}">
 </head>
 <body>
 
-<h2>My Profile</h2>
+<!-- NAVBAR -->
+<header class="navbar">
+    <div class="logo">🎮 GameStore</div>
+    <nav>
+        <a href="{% url 'userpage' %}">Store</a>
+       <a href="#" class="nav-disabled">Library</a>
 
-<div class="profile-card">
-    <img src="{{ profile.profile_image.url }}" class="avatar">
+        <a href="{% url 'user_profile' %}" class="active">Profile</a>
+        <a href="{% url 'login' %}">Logout</a>
+    </nav>
+</header>
 
-    <h3>{{ profile.user.username }}</h3>
-    <p>{{ profile.user.email }}</p>
+<!-- PROFILE WRAPPER -->
+<main class="profile-wrapper">
 
-    <p class="bio">
-        {{ profile.bio|default:"No bio available." }}
-    </p>
-</div>
+    <!-- LEFT PANEL -->
+    <section class="profile-left">
+        <div class="avatar-ring">
+            <div class="avatar">🎮</div>
+        </div>
 
-<hr>
+        <h2 class="username">{{ request.user.username }}</h2>
+        <p class="email">{{ request.user.email }}</p>
 
-<div class="profile-links">
-    <a href="{% url 'view_cart' %}">🛒 My Cart</a>
-    <a href="{% url 'view_wishlist' %}">❤️ My Wishlist</a>
-    <a href="{% url 'userpage' %}">🎮 Store</a>
-</div>
+        <span class="badge">PRO GAMER</span>
+
+        <p class="member-since">
+            Member since {{ request.user.date_joined|date:"F Y" }}
+        </p>
+    </section>
+
+    <!-- RIGHT PANEL -->
+    <section class="profile-right">
+
+        <h3>Dashboard</h3>
+
+        <div class="stats-grid">
+            <a href="{% url 'view_cart' %}" class="stat-card">
+                <span class="icon">🛒</span>
+                <div>
+                    <strong>My Cart</strong>
+                    <p>Games ready to buy</p>
+                </div>
+            </a>
+
+            <a href="{% url 'view_wishlist' %}" class="stat-card">
+                <span class="icon">❤️</span>
+                <div>
+                    <strong>Wishlist</strong>
+                    <p>Saved for later</p>
+                </div>
+            </a>
+
+            <div class="stat-card disabled">
+                <span class="icon">📚</span>
+                <div>
+                    <strong>Library</strong>
+                    <p>Coming soon</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="profile-message">
+            🎯 Tip: Complete your collection and dominate your library.
+        </div>
+
+    </section>
+
+</main>
 
 </body>
 </html>

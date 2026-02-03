@@ -1,38 +1,103 @@
 {% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>My Cart</title>
+    <meta charset="UTF-8">
+    <title>My Cart | Game Store</title>
+    <link rel="stylesheet" href="{% static 'user/cart.css' %}">
 </head>
 <body>
 
-<h2>🛒 My Cart</h2>
+<!-- NAVBAR -->
+<header class="navbar">
+    <div class="logo">🎮 GameStore</div>
+    <nav>
+        <a href="{% url 'userpage' %}">Store</a>
+        <a href="#">Library</a>
+        <a href="{% url 'user_profile' %}">Profile</a>
+        <a href="{% url 'login' %}" class="logout">Logout</a>
+    </nav>
+</header>
 
-{% if items %}
-<table border="1" cellpadding="10">
-    <tr>
-        <th>Game</th>
-        <th>Price</th>
-        <th>Action</th>
-    </tr>
+<!-- MAIN CONTENT -->
+<main class="page-content">
 
-    {% for item in items %}
-    <tr>
-        <td>{{ item.game.name }}</td>
-        <td>₹{{ item.game.game_price }}</td>
-        <td>
-            <a href="{% url 'remove_from_cart' item.game.id %}">Remove</a>
-        </td>
-    </tr>
-    {% endfor %}
-</table>
+    <h2 class="page-title">🛒 My Cart</h2>
 
-{% else %}
-<p>Your cart is empty.</p>
-{% endif %}
+    {% if items %}
+    <div class="cart-table">
+        <div class="cart-header">
+            <span>Game</span>
+            <span>Price</span>
+            <span>Actions</span>
+        </div>
 
-<br>
-<a href="{% url 'userpage' %}">⬅ Back to Store</a>
+        {% for item in items %}
+        <div class="cart-row">
+
+    <!-- GAME INFO -->
+    <div class="game-info-cart">
+        {% if item.game.game_logo %}
+            <img src="{{ item.game.game_logo.url }}" alt="{{ item.game.name }}">
+        {% else %}
+            <img src="{{ item.game.game_image.url }}" alt="{{ item.game.name }}">
+        {% endif %}
+        <span class="game-title">{{ item.game.name }}</span>
+    </div>
+
+    <!-- PRICE -->
+    <span>₹ {{ item.game.game_price }}</span>
+
+    <!-- ACTIONS -->
+  <span class="actions">
+    <a class="buy-btn" href="{% url 'checkout' item.game.id %}">
+        Buy Now
+    </a>
+    <a class="remove-btn" href="{% url 'remove_from_cart' item.game.id %}">
+        Remove
+    </a>
+</span>
+
+
+</div>
+
+        {% endfor %}
+    </div>
+
+    {% else %}
+        <p class="empty-text">Your cart is empty.</p>
+    {% endif %}
+
+</main>
+
+<!-- FOOTER / ABOUT SECTION -->
+<footer class="store-footer">
+
+    <div class="footer-top">
+        <span class="brand">GAME STORE</span>
+    </div>
+
+    <div class="footer-text">
+        © 2026 Game Store. All rights reserved.<br>
+        All trademarks are property of their respective owners.
+    </div>
+
+    <div class="footer-links">
+        <a href="#">Privacy Policy</a> |
+        <a href="#">Legal</a> |
+        <a href="#">Accessibility</a> |
+        <a href="#">Refunds</a> |
+        <a href="#">Support</a>
+    </div>
+
+    <div class="footer-links">
+        <a href="#">About Game Store</a> |
+        <a href="#">Jobs</a> |
+        <a href="#">Distribution</a> |
+        <a href="#">Gift Cards</a>
+    </div>
+
+</footer>
 
 </body>
 </html>

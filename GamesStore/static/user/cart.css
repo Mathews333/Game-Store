@@ -1,0 +1,184 @@
+/* GLOBAL LAYOUT FIX */
+html, body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    background: #121212;
+    color: #ffffff;
+    font-family: "Segoe UI", sans-serif;
+}
+
+/* NAVBAR */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 40px;
+    background: #0b1220;
+    border-bottom: 1px solid #1e293b;
+}
+
+.navbar .logo {
+    font-size: 20px;
+    font-weight: bold;
+    color: #38bdf8;
+}
+
+.navbar nav a {
+    color: #cbd5f5;
+    text-decoration: none;
+    margin-left: 20px;
+    font-size: 14px;
+}
+
+.navbar nav a:hover {
+    color: #38bdf8;
+}
+
+/* PAGE CONTENT */
+.page-content {
+    flex: 1;
+    padding: 40px;
+}
+
+.page-title {
+    margin-bottom: 30px;
+}
+
+/* CART TABLE */
+.cart-table {
+    background: #1b2838;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.cart-header,
+.cart-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 2fr;
+    padding: 16px 20px;
+    align-items: center;
+}
+
+.cart-header {
+    background: #0b1220;
+    font-weight: bold;
+    color: #38bdf8;
+}
+
+.cart-row {
+    border-top: 1px solid #1e293b;
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+}
+
+.buy-btn {
+    background: #22c55e;
+    color: #020617;
+    padding: 6px 14px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+.remove-btn {
+    background: #7f1d1d;
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+.buy-btn:hover {
+    background: #16a34a;
+}
+
+.remove-btn:hover {
+    background: #991b1b;
+}
+
+.empty-text {
+    text-align: center;
+    color: #94a3b8;
+}
+
+/* FOOTER */
+.store-footer {
+    background: #020617;
+    padding: 40px 20px;
+    text-align: center;
+    font-size: 13px;
+    border-top: 1px solid #1e293b;
+}
+
+.footer-top .brand {
+    font-size: 18px;
+    letter-spacing: 2px;
+    color: #e5f3ff;
+}
+
+.footer-text {
+    margin: 14px 0;
+    color: #94a3b8;
+}
+
+.footer-links a {
+    color: #38bdf8;
+    text-decoration: none;
+    margin: 0 6px;
+}
+
+.footer-links a:hover {
+    text-decoration: underline;
+}
+
+/* GAME INFO (LOGO + NAME) */
+.game-info-cart {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+/* STEAM-LIKE LARGE THUMBNAIL */
+.game-info-cart img {
+    width: 140px;          /* 🔥 Steam-size width */
+    height: 80px;          /* 🔥 Steam-size height */
+    object-fit: cover;
+    border-radius: 6px;
+    background: #020617;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.55);
+}
+
+/* GAME TITLE */
+.game-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: #e5f3ff;
+    line-height: 1.3;
+}
+
+.cart-row {
+    min-height: 110px;
+}
+
+
+.game-info-cart img {
+    width: 60px;
+    height: 35px;
+    object-fit: cover;
+    border-radius: 4px;
+    background: #020617;
+}
+
+.game-title {
+    font-size: 15px;
+    color: #e5f3ff;
+}

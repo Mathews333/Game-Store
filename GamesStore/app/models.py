@@ -52,13 +52,6 @@ class Cart(models.Model):
         return f"{self.user.username} - {self.game.name}"
 
 
-
-class Wishlist(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    game = models.ForeignKey(gamedetails, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f"{self.game.name} in wishlist"
     
 class Wishlist(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

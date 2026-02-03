@@ -14,11 +14,13 @@
         <nav class="first_nav">
             <img src="{% static 'image/logo.png' %}" alt="Store Logo">
             <ul class="nav-links">
-                <li><a href="../addproduct/">Add Product</a></li>
-                <li><a href="">View Product</a></li>
-                <li><a href=""></a></li>
-            </ul>
-          <a href="../adminpage"><button class="logout">GO Back</button></a>  
+                <li><a href="{% url 'addproduct' %}">Add Product</a></li>
+<li><a href="{% url 'viewproduct' %}">View Product</a></li>
+
+<a href="{% url 'adminpage' %}">
+    <button class="logout">Go Back</button>
+</a>
+
         </nav>
     </div>
 </body>

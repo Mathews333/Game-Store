@@ -4,49 +4,138 @@
 <head>
     <meta charset="UTF-8">
     <title>Game Store</title>
-    <link rel="stylesheet" href="{% static 'userpage.css' %}">
+    <link rel="stylesheet" href="{% static 'user/viewgame.css' %}">
 </head>
 <body>
 
-<!-- NAVBAR -->
+<!-- ================= NAVBAR ================= -->
 <header class="navbar">
-    <div class="logo">🎮 GameStore</div>
+    <div class="logo">
+        <a href="{% url 'userpage' %}" style="color:white; text-decoration:none;">
+            🎮 GameStore
+        </a>
+    </div>
+
+    <!-- SEARCH BAR -->
+    <form method="get" class="nav-search">
+        <input
+            type="text"
+            name="q"
+            placeholder="Search games..."
+            value="{{ search_query|default:'' }}"
+        >
+        <button type="submit">🔍</button>
+    </form>
+
     <nav>
-        <a href="#">Store</a>
-        <a href="#">Library</a>
+        <a href="{% url 'userpage' %}">Store</a>
         <a href="{% url 'user_profile' %}">Profile</a>
-        <a href="{% url 'login' %}" class="logout">Logout</a>
+        <a href="{% url 'login' %}">Logout</a>
     </nav>
 </header>
 
-<!-- MAIN CONTENT -->
-<main class="container">
-    <h2 class="title">Featured Games</h2>
+<!-- ================= MAIN LAYOUT ================= -->
+<main class="store-layout">
 
-    <div class="game-grid">
-        {% for game in products %}
-        <div class="game-card">
-            {% if game.game_image %}
-                <a href="{% url 'game_detail' game.id %}"><img src="{{ game.game_image.url }}" alt="{{ game.name }}"></a>
-            {% else %}
-                <img src="{% static 'media/default_game.jpg' %}" alt="Game">
-            {% endif %}
+    <!-- ===== LEFT: GAMES ===== -->
+    <section class="store-main">
+        <h2 class="title">Featured Games</h2>
 
-            <div class="game-info">
-                <h3>{{ game.name }}</h3>
-                <p class="category">{{ game.category }}</p>
-                <p class="price">₹ {{ game.game_price }}</p>
+        <div class="game-grid">
+            {% for game in products %}
+            <div class="game-card">
 
-                <div class="buttons">
+                {% if game.game_image %}
+                <a href="{% url 'game_detail' game.id %}">
+                    <img src="{{ game.game_image.url }}" alt="{{ game.name }}">
+                </a>
+                {% endif %}
 
+                <div class="game-info">
+                    <h3>{{ game.name }}</h3>
+                    <p class="category">{{ game.get_category_display }}</p>
+                    <p class="price">₹ {{ game.game_price }}</p>
                 </div>
+
             </div>
+            {% empty %}
+                <p>No games found.</p>
+            {% endfor %}
         </div>
-        {% empty %}
-        <p>No games available.</p>
-        {% endfor %}
-    </div>
+    </section>
+
+    <!-- ===== RIGHT: CATEGORIES ===== -->
+    <aside class="store-sidebar">
+        <h3>Categories</h3>
+
+        <ul class="category-list">
+            <li>
+                <a href="{% url 'userpage' %}?q={{ search_query|default:'' }}"
+                   class="{% if not active_category %}active{% endif %}">
+                    All Games
+                </a>
+            </li>
+
+            {% for key, value in categories %}
+            <li>
+                <a href="{% url 'filter_category' key %}?q={{ search_query|default:'' }}"
+                   class="{% if active_category == key %}active{% endif %}">
+                    {{ value }}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </aside>
+
 </main>
+
+<!-- ================= DISCOVERY ================= -->
+<section class="discovery-section">
+    <div class="discovery-content">
+        <div class="discovery-icon">🎮</div>
+        <h2>Keep scrolling for more recommendations</h2>
+        <p>
+            Explore a wide range of games across multiple genres,
+            hand-picked for you.
+        </p>
+    </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer class="store-footer">
+
+    <div class="footer-top">
+        <span class="brand">GAME STORE</span>
+    </div>
+
+    <div class="footer-text">
+        © 2026 Game Store. All rights reserved.
+        All trademarks are property of their respective owners.
+    </div>
+
+    <div class="footer-links">
+        <a href="#">Privacy Policy</a>
+        <span>|</span>
+        <a href="#">Legal</a>
+        <span>|</span>
+        <a href="#">Accessibility</a>
+        <span>|</span>
+        <a href="#">Refunds</a>
+        <span>|</span>
+        <a href="#">Support</a>
+    </div>
+
+    <div class="footer-bottom-links">
+        <a href="#">About</a>
+        <span>|</span>
+        <a href="#">Jobs</a>
+        <span>|</span>
+        <a href="#">Distribution</a>
+        <span>|</span>
+        <a href="#">Gift Cards</a>
+    </div>
+
+</footer>
 
 </body>
 </html>

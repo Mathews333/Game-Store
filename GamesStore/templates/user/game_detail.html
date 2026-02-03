@@ -17,17 +17,32 @@
         {% endif %}
 
         <!-- ACTION BUTTONS -->
-        <div class="action-buttons">
-            <a href="{% url 'add_to_cart' game.id %}">
-    <button class="buy-btn">Add to Cart</button>
-</a>
+<div class="purchase-row">
 
-<a href="{% url 'add_to_wishlist' game.id %}">
-    <button class="wishlist-btn">Wishlist</button>
-</a>
+    <div class="price-box">
+        ₹ {{ game.game_price }}
+    </div>
 
+    <a href="{% url 'checkout' game.id %}">
+        <button class="buy-now-btn">Buy Now</button>
+    </a>
 
-        </div>
+    {% if in_cart %}
+        <button class="in-cart-btn" disabled>
+            ✔ Already in Cart
+        </button>
+    {% else %}
+        <a href="{% url 'add_to_cart' game.id %}">
+            <button class="buy-btn">Add to Cart</button>
+        </a>
+    {% endif %}
+
+    <a href="{% url 'add_to_wishlist' game.id %}">
+        <button class="wishlist-btn">Wishlist</button>
+    </a>
+
+</div>
+
 
         <!-- DESCRIPTION UNDER LOGO -->
         <p class="description">
@@ -87,7 +102,7 @@
     </video>
     {% endif %}
 
-    <p class="price">₹ {{ game.game_price }}</p>
+
 </div>
 
 

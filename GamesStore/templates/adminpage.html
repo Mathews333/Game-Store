@@ -3,28 +3,46 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Page</title>
-     <link rel="stylesheet" href="{% static './adminpage1.css' %}">
+    <title>Admin Dashboard | GameStore</title>
+    <link rel="stylesheet" href="{% static 'adminpage1.css' %}">
 </head>
 <body>
-  <div class="nav">
-    <nav class="first_nav">
-      <img src="{% static 'Image/logo.png' %}" alt="logo">
-      <ul class="nav-links">
-        <li class="dropdown">
-          <a href="" class="dropbtn">Manage Product</a>
-          <div class="dropdown-content">
-    <a href="{% url 'addproduct' %}">Add Games</a>
-    <a href="{% url 'viewproduct' %}">View Games</a>
-</div>
 
-        </li>
-        <li><a href="">Orders</a></li>
-        <li><a href="">Stock</a></li>
-      </ul>
-      <button class="logout">Logout</button>
+<!-- ADMIN NAVBAR -->
+<header class="admin-navbar">
+    <div class="brand">
+        🎮 <span>GameStore Admin</span>
+    </div>
+
+    <nav>
+        <a href="{% url 'login' %}" class="logout">Logout</a>
     </nav>
-  </div>
+</header>
+
+
+<!-- DASHBOARD -->
+<main class="admin-dashboard">
+
+    <h1>Welcome, Admin</h1>
+    <p class="subtitle">Manage your store content and games</p>
+
+    <div class="admin-cards">
+
+        <a href="{% url 'addproduct' %}" class="admin-card">
+            <span class="icon">➕</span>
+            <h3>Add Game</h3>
+            <p>Create a new game listing</p>
+        </a>
+
+        <a href="{% url 'viewproduct' %}" class="admin-card">
+            <span class="icon">🎮</span>
+            <h3>View Games</h3>
+            <p>Edit or remove existing games</p>
+        </a>
+
+    </div>
+
+</main>
+
 </body>
 </html>

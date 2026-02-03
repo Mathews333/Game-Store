@@ -1,0 +1,83 @@
+body {
+    background: #020617;
+    color: #e5f3ff;
+    font-family: "Segoe UI", sans-serif;
+    margin: 0;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 14px 28px;
+    background: #0b1220;
+}
+
+.checkout-wrapper {
+    max-width: 900px;
+    margin: 60px auto;
+    padding: 20px;
+}
+
+.checkout-wrapper h1 {
+    margin-bottom: 30px;
+}
+
+.checkout-card {
+    background: #0b1220;
+    padding: 30px;
+    border-radius: 12px;
+}
+
+.game-info {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.game-logo {
+    width: 140px;
+}
+
+.details h2 {
+    margin-bottom: 10px;
+}
+
+.summary {
+    border-top: 1px solid #1e293b;
+    padding-top: 20px;
+    margin-bottom: 20px;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.total {
+    font-size: 18px;
+    font-weight: bold;
+    color: #38bdf8;
+}
+
+.confirm-btn {
+    width: 100%;
+    padding: 14px;
+    background: #38bdf8;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.confirm-btn:hover {
+    background: #0ea5e9;
+}
+
+.cancel {
+    display: block;
+    margin-top: 14px;
+    text-align: center;
+    color: #94a3b8;
+    text-decoration: none;
+}

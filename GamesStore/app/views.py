@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
 from .models import gamedetails, Cart, Wishlist, UserProfile
+from django.db.models import Q
+
 
 
 
@@ -159,8 +161,9 @@ def user_login(request):
 
         if user:
             auth_login(request, user)
-            messages.success(request, "Login successful")
-            return redirect("userpage")
+
+            next_url = request.GET.get('next')
+            return redirect(next_url or 'userpage')
 
         messages.error(request, "Invalid username or password")
         return redirect("login")
@@ -168,13 +171,30 @@ def user_login(request):
     return render(request, "user/login.html")
 
 
+
 # =========================
 # USER STORE & GAME PAGES
 # =========================
 
-def userpage(request):
+def userpage(request, category=None):
+    query = request.GET.get('q', '')
+
     products = gamedetails.objects.all()
-    return render(request, 'user/userpage.html', {'products': products})
+
+    if category:
+        products = products.filter(category=category)
+
+    if query:
+        products = products.filter(name__icontains=query)
+
+    categories = gamedetails.CATEGORY_CHOICE
+
+    return render(request, 'user/userpage.html', {
+        'products': products,
+        'categories': categories,
+        'active_category': category,
+        'search_query': query,
+    })
 
 
 def view_game(request):
@@ -182,15 +202,26 @@ def view_game(request):
     return render(request, 'user/view_game.html', {'games': games})
 
 
+from django.contrib.auth.decorators import login_required
+
+@login_required
 def game_detail(request, id):
     game = get_object_or_404(gamedetails, id=id)
-    return render(request, 'user/game_detail.html', {'game': game})
+
+    in_cart = Cart.objects.filter(
+        user=request.user,
+        game=game
+    ).exists()
+
+    return render(request, 'user/game_detail.html', {
+        'game': game,
+        'in_cart': in_cart
+    })
 
 
 # =========================
 # CART & WISHLIST
 # =========================
-
 @login_required
 def add_to_cart(request, game_id):
     game = get_object_or_404(gamedetails, id=game_id)
@@ -200,7 +231,12 @@ def add_to_cart(request, game_id):
         game=game
     )
 
+    # BUY NOW → go to cart
+    if request.GET.get('buy') == 'now':
+        return redirect('view_cart')
+
     return redirect('game_detail', id=game_id)
+
 
 @login_required
 def remove_from_cart(request, game_id):
@@ -269,3 +305,21 @@ def user_profile(request):
     profile, created = UserProfile.objects.get_or_create(user=request.user)
     return render(request, 'user/profile.html', {'profile': profile})
 
+@login_required
+def buy_now(request, game_id):
+    game = get_object_or_404(gamedetails, id=game_id)
+
+    if request.method == "POST":
+        messages.success(request, f"You successfully purchased {game.name}")
+        return redirect('userpage')
+
+    return render(request, 'user/buy_now.html', {
+        'game': game
+    })
+@login_required
+def checkout(request, game_id):
+    game = get_object_or_404(gamedetails, id=game_id)
+
+    return render(request, 'user/checkout.html', {
+        'game': game
+    })
