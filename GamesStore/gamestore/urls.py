@@ -23,7 +23,7 @@ urlpatterns = [
     path('', views.user_login, name='login'),          # 👈 homepage login
     path('userpage/', views.userpage, name='userpage'), # 👈 THIS FIXES ERROR
     
-    path('games/', views.view_game, name='view_game'),
+    # path('games/', views.view_game, name='view_game'),
     path('games/<int:id>/', views.game_detail, name='game_detail'),
     
     path('cart/add/<int:game_id>/', views.add_to_cart, name='add_to_cart'),
@@ -42,10 +42,10 @@ urlpatterns = [
     path('store/', views.userpage, name='userpage'),
     path('store/category/<str:category>/', views.userpage, name='filter_category'),
     
-    path('buy/<int:game_id>/', views.buy_now, name='buy_now'),
+    # path('buy/<int:game_id>/', views.buy_now, name='buy_now'),
   path('checkout/<int:game_id>/', views.checkout, name='checkout'),
-
-
+  
+    path('library/', views.library, name='library'),
 
 
 
