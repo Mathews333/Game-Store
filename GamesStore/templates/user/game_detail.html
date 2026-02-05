@@ -6,6 +6,21 @@
     <link rel="stylesheet" href="{% static 'user/gamedetail.css' %}">
 </head>
 <body>
+    <header class="navbar">
+    <div class="nav-left">
+        <a href="{% url 'userpage' %}" class="brand">
+            🎮 <span>GameStore</span>
+        </a>
+    </div>
+
+    <nav class="nav-right">
+        <a href="{% url 'userpage' %}">Store</a>
+        <a href="{% url 'view_cart' %}">Cart</a>
+        <a href="{% url 'user_profile' %}">Profile</a>
+        <a href="{% url 'login' %}" class="logout">Logout</a>
+    </nav>
+</header>
+
 
 <div class="game-detail-container">
 

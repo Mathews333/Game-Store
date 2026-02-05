@@ -153,3 +153,24 @@ body {
         padding: 50px 40px;
     }
 }
+
+.signup-hint {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 15px;
+    color: #b5b5b5;
+}
+
+.signup-hint a {
+    margin-left: 6px;
+    color: #2aa3ff;
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.signup-hint a:hover {
+    border-bottom: 1px solid #2aa3ff;
+    color: #6bc1ff;
+}

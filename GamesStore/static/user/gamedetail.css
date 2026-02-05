@@ -266,3 +266,67 @@ body {
 .buy-now-btn:hover {
     background: linear-gradient(90deg, #16a34a, #15803d);
 }
+
+/* NAVBAR */
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    height: 64px;
+    background: linear-gradient(180deg, #0b1220, #070b14);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.nav-left .brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 20px;
+    font-weight: 700;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.nav-left .brand span {
+    letter-spacing: 0.5px;
+}
+
+.nav-right {
+    display: flex;
+    gap: 22px;
+}
+
+.nav-right a {
+    color: #cfd8e3;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    position: relative;
+}
+
+.nav-right a:hover {
+    color: #ffffff;
+}
+
+.nav-right a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    width: 0%;
+    height: 2px;
+    background: #2aa3ff;
+    transition: width 0.25s ease;
+}
+
+.nav-right a:hover::after {
+    width: 100%;
+}
+
+.logout {
+    color: #ff6b6b !important;
+}
