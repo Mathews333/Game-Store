@@ -27,6 +27,38 @@
         <input type="number" name="game_price" value="{{ product.game_price }}" required>
 
         <hr>
+<h3>Game Details</h3>
+
+<input type="text" name="genre"
+       value="{{ product.genre }}"
+       placeholder="Genre"><br><br>
+
+<input type="text" name="developer"
+       value="{{ product.developer }}"
+       placeholder="Developer"><br><br>
+
+<input type="number" step="0.1"
+       name="rating"
+       value="{{ product.rating }}"
+       placeholder="Rating"><br><br>
+
+<label>Release Date</label><br>
+<input type="date"
+       name="release_date"
+       value="{{ product.release_date|date:'Y-m-d' }}"><br><br>
+
+<input type="text"
+       name="players"
+       value="{{ product.players }}"
+       placeholder="Players"><br><br>
+
+<input type="text"
+       name="storage_required"
+       value="{{ product.storage_required }}"
+       placeholder="Storage Required"><br><br>
+
+
+        <hr>
 
         <!-- GAME LOGO -->
         <label>Game Logo</label><br>

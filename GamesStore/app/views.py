@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db.models import Q
+from .ai_utils import generate_embedding_for_game
 
 from .models import (
     gamedetails,
@@ -39,9 +40,11 @@ def manageproduct(request):
 
 def addproduct(request):
     if request.method == "POST":
-        gamedetails.objects.create(
-            name=request.POST.get("name"),
+
+        # 1️⃣ First create the game
+        game = gamedetails.objects.create(
             category=request.POST.get("category"),
+            name=request.POST.get("name"),
             description=request.POST.get("description"),
             game_price=request.POST.get("game_price"),
             game_image=request.FILES.get("game_image"),
@@ -52,10 +55,17 @@ def addproduct(request):
             screenshot4=request.FILES.get("screenshot4"),
             trailer=request.FILES.get("trailer"),
         )
-        messages.success(request, "Game added successfully")
+
+        # 2️⃣ Now generate embedding from the saved object
+        from .ai_utils import generate_embedding_for_game
+
+        game.embedding = generate_embedding_for_game(game)
+        game.save()
+
         return redirect("viewproduct")
 
     return render(request, "addproduct.html")
+
 
 
 def viewproduct(request):
@@ -241,6 +251,13 @@ def viewproductupdate(request, pk):
         product.category = request.POST.get('category')
         product.description = request.POST.get('description')
         product.game_price = request.POST.get('game_price')
+        product.genre = request.POST.get("genre")
+        product.developer = request.POST.get("developer")
+        product.rating = request.POST.get("rating")
+        product.release_date = request.POST.get("release_date")
+        product.players = request.POST.get("players")
+        product.storage_required = request.POST.get("storage_required")
+
 
         if request.FILES.get('game_image'):
             product.game_image = request.FILES.get('game_image')

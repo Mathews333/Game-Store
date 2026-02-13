@@ -1,41 +1,3 @@
-{% comment %} {%  load static  %}
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-<link rel="stylesheet" href="{%   static 'addproduct.css' %}">
-</head>
-<body>
-    <form action="../addproduct/" method="post" enctype="multipart/form-data">
-{%csrf_token%}
-
-<select name="category" id="">
-<option value="" selected disabled> <---SELECT CATEGORY---></option>
-<option value="Multipl">Multiplayer</option>
-<option value="RPG">Action Rpg</option>
-<option value="Racing">Racing</option>
-<option value="Rogue">Rogue</option>
-<option value="Sim">Simulator</option>
-<option value="Online">Online Co-op</option>
-<option value="Horror">Horror</option>
-<option value="Indie">Indie</option>
-<option value="AAA">AAA Titles</option>
-
-</select><br>
-<input type="text" name="name" id="" placeholder="name">
-<input type="text" name="description" id="" placeholder="descriptin" required><br>
-<input type="number" name="game_price" id="" placeholder="enter price" required><br>
-<input type="file" name="game_image" id="" accept="/image*" required><br>
-<input type="submit" value="submit">
-
-</form>
-</body>
-</html> {% endcomment %}
-
-
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -65,6 +27,23 @@
     <input type="text" name="name" placeholder="Game Name" required><br>
     <input type="text" name="description" placeholder="Description" required><br>
     <input type="number" name="game_price" placeholder="Price" required><br><br>
+
+    <hr>
+<h3>Game Details</h3>
+
+<input type="text" name="genre" placeholder="Genre (e.g. Action RPG)"><br><br>
+
+<input type="text" name="developer" placeholder="Developer (e.g. Capcom)"><br><br>
+
+<input type="number" step="0.1" name="rating" placeholder="Rating (e.g. 4.5)"><br><br>
+
+<label>Release Date</label><br>
+<input type="date" name="release_date"><br><br>
+
+<input type="text" name="players" placeholder="Players (Single / Multiplayer)"><br><br>
+
+<input type="text" name="storage_required" placeholder="Storage Required (e.g. 80 GB)"><br><br>
+
 
     {% comment %} <!-- MAIN IMAGE -->
     <label>Main Game Image</label><br>
