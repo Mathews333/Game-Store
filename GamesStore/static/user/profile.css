@@ -1,3 +1,5 @@
+/* ================= RESET ================= */
+
 * {
     margin: 0;
     padding: 0;
@@ -6,17 +8,18 @@
 }
 
 body {
-    background: radial-gradient(circle at top, #0f172a, #020617);
+    background: linear-gradient(135deg, #0f1c2e, #091423);
     color: #e5f3ff;
     min-height: 100vh;
 }
 
-/* NAVBAR */
+/* ================= NAVBAR ================= */
+
 .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 18px 48px;
+    padding: 22px 80px;
     background: #020617;
     border-bottom: 1px solid #1e293b;
 }
@@ -29,7 +32,7 @@ body {
 .navbar nav a {
     color: #94a3b8;
     text-decoration: none;
-    margin-left: 24px;
+    margin-left: 28px;
     font-size: 14px;
 }
 
@@ -38,165 +41,170 @@ body {
     color: #38bdf8;
 }
 
-/* PROFILE LAYOUT */
-.profile-wrapper {
-    max-width: 1100px;
-    margin: 80px auto;
-    padding: 0 20px;
+/* ================= PROFILE LAYOUT ================= */
+
+.profile-container {
     display: grid;
-    grid-template-columns: 320px 1fr;
-    gap: 40px;
-}
-
-/* LEFT PANEL */
-.profile-left {
-    background: linear-gradient(180deg, #020617, #020617);
-    border-radius: 18px;
-    padding: 40px 30px;
-    text-align: center;
-    position: relative;
-    border: 1px solid #1e293b;
-}
-
-/* NEON STRIP */
-.profile-left::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: 18px;
-    padding: 2px;
-    background: linear-gradient(180deg, #38bdf8, transparent);
-    -webkit-mask:
-        linear-gradient(#000 0 0) content-box,
-        linear-gradient(#000 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-}
-
-/* AVATAR */
-.avatar-ring {
-    width: 120px;
-    height: 120px;
-    margin: 0 auto 20px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #38bdf8, #6366f1);
-    padding: 4px;
-}
-
-.avatar {
-    background: #020617;
+    grid-template-columns: 420px 1fr;
+    gap: 80px;
+    padding: 80px 120px;
     width: 100%;
-    height: 100%;
+}
+
+/* ================= LEFT PROFILE CARD ================= */
+
+.profile-card {
+    background: #1f2f45;
+    padding: 60px 40px;
+    border-radius: 24px;
+    text-align: center;
+    height: fit-content;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+}
+
+.avatar-circle {
+    width: 140px;
+    height: 140px;
+    margin: 0 auto 25px;
+    background: linear-gradient(135deg, #2aa3ff, #00d4ff);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 48px;
+    font-size: 46px;
 }
 
-.username {
-    font-size: 20px;
-    margin-bottom: 4px;
+.profile-card h2 {
+    font-size: 26px;
+    margin-bottom: 8px;
 }
 
 .email {
-    font-size: 13px;
+    font-size: 14px;
     color: #94a3b8;
+    margin-bottom: 18px;
 }
 
 .badge {
-    display: inline-block;
-    margin: 14px 0;
-    padding: 6px 14px;
-    font-size: 12px;
-    letter-spacing: 1px;
-    background: #1e293b;
+    background: #2aa3ff;
+    padding: 6px 18px;
     border-radius: 20px;
-    color: #38bdf8;
+    font-size: 12px;
+    display: inline-block;
 }
 
 .member-since {
-    font-size: 12px;
-    color: #64748b;
-}
-
-/* RIGHT PANEL */
-.profile-right {
-    background: #020617;
-    border-radius: 18px;
-    padding: 40px;
-    border: 1px solid #1e293b;
-}
-
-.profile-right h3 {
-    margin-bottom: 24px;
-    font-size: 20px;
-}
-
-/* STATS */
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 20px;
-}
-
-.stat-card {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    background: #0b1220;
-    padding: 20px;
-    border-radius: 14px;
-    text-decoration: none;
-    color: #e5f3ff;
-    border: 1px solid #1e293b;
-    transition: 0.3s;
-}
-
-.stat-card:hover {
-    background: #38bdf8;
-    color: #020617;
-    transform: translateY(-4px);
-}
-
-.stat-card .icon {
-    font-size: 28px;
-}
-
-.stat-card p {
-    font-size: 12px;
+    margin-top: 20px;
+    font-size: 13px;
     color: #94a3b8;
 }
 
-.stat-card:hover p {
-    color: #020617;
+/* ================= RIGHT SIDE ================= */
+
+.profile-content {
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
 }
 
-.stat-card.disabled {
-    opacity: 0.4;
-    pointer-events: none;
+/* ================= STATS ================= */
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
 }
 
-/* MESSAGE */
-.profile-message {
-    margin-top: 30px;
-    padding: 16px;
-    border-radius: 10px;
-    background: #020617;
-    border-left: 4px solid #38bdf8;
-    font-size: 13px;
-    color: #cbd5f5;
+.stat-card {
+    background: #1f2f45;
+    padding: 55px 20px;
+    border-radius: 22px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    transition: 0.3s ease;
 }
 
-/* RESPONSIVE */
-@media (max-width: 900px) {
-    .profile-wrapper {
-        grid-template-columns: 1fr;
-    }
+.stat-card:hover {
+    transform: translateY(-6px);
 }
 
-.nav-disabled {
-    color: #64748b;
-    cursor: not-allowed;
-    pointer-events: none;
+.stat-card h3 {
+    font-size: 46px;
+    margin-bottom: 12px;
+}
+
+.stat-card p {
+    font-size: 15px;
+    color: #94a3b8;
+}
+
+/* ================= GAMING FOCUS ================= */
+
+.dna-section {
+    background: #1f2f45;
+    padding: 55px;
+    border-radius: 24px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.dna-section h3 {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.dna-bar {
+    height: 16px;
+    background: #2a475e;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    overflow: hidden;
+}
+
+.dna-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #2aa3ff, #00d4ff);
+}
+
+/* ================= RECENTLY PLAYED ================= */
+
+.recent-section {
+    margin-top: 10px;
+}
+
+.recent-section h3 {
+    font-size: 24px;
+    margin-bottom: 30px;
+}
+
+.recent-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+}
+
+.recent-card {
+    background: #162235;
+    border-radius: 20px;
+    overflow: hidden;
+    transition: 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.recent-card:hover {
+    transform: translateY(-10px);
+}
+
+.recent-card img {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+}
+
+.recent-info {
+    padding: 20px;
+    font-size: 17px;
+}
+
+.empty-msg {
+    color: #94a3b8;
 }

@@ -324,3 +324,144 @@ body {
     padding: 14px 30px;
     background: #020617;
 }
+.recommended-wrapper {
+    margin-bottom: 50px;
+}
+.recommended-wrapper {
+    margin-bottom: 60px;
+}
+
+.recommended-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.ai-badge {
+    font-size: 12px;
+    background: linear-gradient(90deg, #00c6ff, #0072ff);
+    padding: 4px 10px;
+    border-radius: 20px;
+    color: white;
+}
+
+.recommended-scroll {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+}
+
+.recommended-scroll::-webkit-scrollbar {
+    height: 6px;
+}
+
+.recommended-scroll::-webkit-scrollbar-thumb {
+    background: #1e90ff;
+    border-radius: 4px;
+}
+
+.recommended-card {
+    min-width: 240px;
+    background: #1b2838;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: 0.3s ease;
+}
+
+.recommended-card:hover {
+    transform: translateY(-6px);
+}
+
+.recommended-card img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+}
+
+.rec-info {
+    padding: 12px;
+}
+
+.rec-price {
+    color: #4caf50;
+    font-weight: 600;
+}
+/* ================= RECOMMENDED SECTION ================= */
+
+.recommended-wrapper {
+    margin-bottom: 50px;
+    padding: 25px;
+    border-radius: 16px;
+    background: linear-gradient(145deg, #0f1c2e, #0b1624);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+.recommended-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.ai-badge {
+    background: linear-gradient(90deg, #2aa3ff, #00d4ff);
+    color: white;
+    padding: 6px 14px;
+    font-size: 12px;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+/* Horizontal scroll */
+.recommended-scroll {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+}
+
+.recommended-scroll::-webkit-scrollbar {
+    height: 6px;
+}
+
+.recommended-scroll::-webkit-scrollbar-thumb {
+    background: #2aa3ff;
+    border-radius: 10px;
+}
+
+/* Bigger special cards */
+.recommended-card {
+    min-width: 260px;
+    background: #162235;
+    border-radius: 14px;
+    overflow: hidden;
+    transition: 0.3s ease;
+    flex-shrink: 0;
+}
+
+.recommended-card img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+}
+
+.recommended-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 25px rgba(42,163,255,0.4);
+}
+
+.rec-info {
+    padding: 15px;
+}
+
+.rec-info h3 {
+    font-size: 16px;
+    margin-bottom: 6px;
+}
+
+.rec-info p {
+    color: #38d39f;
+    font-weight: 600;
+}

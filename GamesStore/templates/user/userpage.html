@@ -37,8 +37,56 @@
 <!-- ================= MAIN LAYOUT ================= -->
 <main class="store-layout">
 
-    <!-- ===== LEFT: GAMES ===== -->
+    <!-- ===== LEFT: MAIN CONTENT ===== -->
     <section class="store-main">
+{% if recommended %}
+<section class="recommended-wrapper">
+
+    <div class="recommended-header">
+        <div>
+            <h2>✨ Recommended For You</h2>
+            <p class="recommended-sub">
+                Based on your interests
+            </p>
+        </div>
+        <span class="ai-badge">AI Powered</span>
+    </div>
+<div class="recommended-scroll-wrapper">
+    <div class="recommended-scroll" id="recommendedScroll">
+
+        {% for game in recommended %}
+        <div class="recommended-card">
+            <a href="{% url 'game_detail' game.id %}">
+                <img src="{{ game.game_image.url }}">
+            </a>
+            <div class="rec-info">
+                <h3>{{ game.name }}</h3>
+                <span class="rec-category">{{ game.get_category_display }}</span>
+                <p class="rec-price">₹ {{ game.game_price }}</p>
+            </div>
+        </div>
+        {% endfor %}
+
+        <!-- DUPLICATE ONCE FOR INFINITE LOOP -->
+        {% for game in recommended %}
+        <div class="recommended-card">
+            <a href="{% url 'game_detail' game.id %}">
+                <img src="{{ game.game_image.url }}">
+            </a>
+            <div class="rec-info">
+                <h3>{{ game.name }}</h3>
+                <span class="rec-category">{{ game.get_category_display }}</span>
+                <p class="rec-price">₹ {{ game.game_price }}</p>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+
+</section>
+{% endif %}
+        <!-- ===== FEATURED GAMES ===== -->
         <h2 class="title">Featured Games</h2>
 
         <div class="game-grid">
@@ -62,9 +110,10 @@
                 <p>No games found.</p>
             {% endfor %}
         </div>
+
     </section>
 
-    <!-- ===== RIGHT: CATEGORIES ===== -->
+    <!-- ===== RIGHT: SIDEBAR ===== -->
     <aside class="store-sidebar">
         <h3>Categories</h3>
 
@@ -136,6 +185,28 @@
     </div>
 
 </footer>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const scrollContainer = document.getElementById("recommendedScroll");
+
+    let speed = 0.6;
+
+    function animate() {
+        scrollContainer.scrollLeft += speed;
+
+        if (scrollContainer.scrollLeft >= scrollContainer.scrollWidth / 2) {
+            scrollContainer.scrollLeft = 0;
+        }
+
+        requestAnimationFrame(animate);
+    }
+
+    animate();
+
+});
+</script>
 
 </body>
 </html>

@@ -185,3 +185,56 @@ body {
 .meta-box p {
     font-weight: 500;
 }
+
+
+/* ================= SIMILAR GAMES ================= */
+
+.similar-section {
+    margin-top: 60px;
+    padding: 20px 40px;
+}
+
+.similar-title {
+    font-size: 22px;
+    margin-bottom: 20px;
+    color: #ffffff;
+}
+
+.similar-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.similar-card {
+    background: #1f2f45;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: 0.3s ease;
+}
+
+.similar-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+}
+
+.similar-card img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+}
+
+.similar-info {
+    padding: 12px;
+}
+
+.similar-info h4 {
+    font-size: 14px;
+    margin-bottom: 6px;
+}
+
+.similar-price {
+    color: #4caf50;
+    font-weight: 600;
+    font-size: 14px;
+}

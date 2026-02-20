@@ -1,82 +1,69 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Your Profile | Game Store</title>
-    <link rel="stylesheet" href="{% static 'user/profile.css' %}">
-</head>
-<body>
 
-<!-- NAVBAR -->
-<header class="navbar">
-    <div class="logo">🎮 GameStore</div>
-    <nav>
-        <a href="{% url 'userpage' %}">Store</a>
-       <a href="#" class="nav-disabled">Library</a>
+{% block title %}Profile | Game Store{% endblock %}
 
-        <a href="{% url 'user_profile' %}" class="active">Profile</a>
-        <a href="{% url 'login' %}">Logout</a>
-    </nav>
-</header>
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'user/profile.css' %}">
+{% endblock %}
 
-<!-- PROFILE WRAPPER -->
-<main class="profile-wrapper">
+{% block content %}
 
-    <!-- LEFT PANEL -->
-    <section class="profile-left">
-        <div class="avatar-ring">
-            <div class="avatar">🎮</div>
-        </div>
+<div class="profile-container">
 
-        <h2 class="username">{{ request.user.username }}</h2>
+    <section class="profile-card">
+        <div class="avatar-circle">🎮</div>
+        <h2>{{ request.user.username }}</h2>
         <p class="email">{{ request.user.email }}</p>
-
         <span class="badge">PRO GAMER</span>
-
         <p class="member-since">
             Member since {{ request.user.date_joined|date:"F Y" }}
         </p>
     </section>
 
-    <!-- RIGHT PANEL -->
-    <section class="profile-right">
-
-        <h3>Dashboard</h3>
+    <section class="profile-content">
 
         <div class="stats-grid">
-            <a href="{% url 'view_cart' %}" class="stat-card">
-                <span class="icon">🛒</span>
-                <div>
-                    <strong>My Cart</strong>
-                    <p>Games ready to buy</p>
-                </div>
-            </a>
-
-            <a href="{% url 'view_wishlist' %}" class="stat-card">
-                <span class="icon">❤️</span>
-                <div>
-                    <strong>Wishlist</strong>
-                    <p>Saved for later</p>
-                </div>
-            </a>
-
-            <div class="stat-card disabled">
-                <span class="icon">📚</span>
-                <div>
-                    <strong>Library</strong>
-                    <p>Coming soon</p>
-                </div>
+            <div class="stat-card">
+                <h3>{{ games_owned }}</h3>
+                <p>Games Owned</p>
+            </div>
+            <div class="stat-card">
+                <h3>{{ wishlist_count }}</h3>
+                <p>Wishlist</p>
+            </div>
+            <div class="stat-card">
+                <h3>{{ cart_count }}</h3>
+                <p>Cart Items</p>
             </div>
         </div>
 
-        <div class="profile-message">
-            🎯 Tip: Complete your collection and dominate your library.
+        <div class="dna-section">
+            <h3>Your Gaming Focus</h3>
+            <div class="dna-bar">
+                <div class="dna-fill" style="width: 65%"></div>
+            </div>
+            <p>Action / RPG Preference</p>
+        </div>
+
+        <div class="recent-section">
+            <h3>Recently Played</h3>
+            <div class="recent-grid">
+                {% for game in user.library_set.all|slice:":2" %}
+                <div class="recent-card">
+                    <img src="{{ game.game.game_image.url }}">
+                    <div class="recent-info">
+                        {{ game.game.name }}
+                    </div>
+                </div>
+                {% empty %}
+                <p class="empty-msg">No recent activity yet.</p>
+                {% endfor %}
+            </div>
         </div>
 
     </section>
 
-</main>
+</div>
 
-</body>
-</html>
+{% endblock %}

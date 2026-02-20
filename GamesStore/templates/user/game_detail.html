@@ -1,3 +1,4 @@
+
 {% load static %}
 <!DOCTYPE html>
 <html>
@@ -150,3 +151,22 @@ function showVideo() {
 
 </body>
 </html>
+
+<section class="similar-section">
+    <h2 class="similar-title">🔥 Similar Games</h2>
+
+    <div class="similar-grid">
+        {% for game in similar_games %}
+        <div class="similar-card">
+            <a href="{% url 'game_detail' game.id %}">
+                <img src="{{ game.game_image.url }}" alt="{{ game.name }}">
+            </a>
+
+            <div class="similar-info">
+                <h4>{{ game.name }}</h4>
+                <p class="similar-price">₹ {{ game.game_price }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>

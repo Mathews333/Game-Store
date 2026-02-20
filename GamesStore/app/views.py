@@ -3,8 +3,6 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.db.models import Q
-from .ai_utils import generate_embedding_for_game
 
 from .models import (
     gamedetails,
@@ -14,15 +12,24 @@ from .models import (
     Library
 )
 
-# =========================
+# ✅ Vector AI imports
+from .vector_utils import (
+    recommend_similar_games,
+    recommend_for_user
+)
+
+from .vector_utils import semantic_search, generate_embeddings_for_all_games
+
+# ==========================================================
 # ADMIN
-# =========================
+# ==========================================================
 
 def adminlogin(request):
     if request.method == "POST":
         if request.POST.get("username") == "admin" and request.POST.get("password") == "admin123":
             return redirect("adminpage")
         messages.error(request, "Invalid admin credentials")
+
     return render(request, "adminlogin.html")
 
 
@@ -34,14 +41,14 @@ def manageproduct(request):
     return render(request, "manageproduct.html")
 
 
-# =========================
+# ==========================================================
 # ADMIN – PRODUCTS
-# =========================
+# ==========================================================
 
 def addproduct(request):
+
     if request.method == "POST":
 
-        # 1️⃣ First create the game
         game = gamedetails.objects.create(
             category=request.POST.get("category"),
             name=request.POST.get("name"),
@@ -56,16 +63,13 @@ def addproduct(request):
             trailer=request.FILES.get("trailer"),
         )
 
-        # 2️⃣ Now generate embedding from the saved object
-        from .ai_utils import generate_embedding_for_game
-
-        game.embedding = generate_embedding_for_game(game)
-        game.save()
+        # ⚡ Regenerate embeddings for all games
+        from .vector_utils import generate_embeddings_for_all_games
+        generate_embeddings_for_all_games(gamedetails)
 
         return redirect("viewproduct")
 
     return render(request, "addproduct.html")
-
 
 
 def viewproduct(request):
@@ -73,12 +77,46 @@ def viewproduct(request):
     return render(request, "viewproduct.html", {"products": products})
 
 
-# =========================
+def viewproductupdate(request, pk):
+    product = get_object_or_404(gamedetails, pk=pk)
+
+    if request.method == "POST":
+        product.name = request.POST.get("name")
+        product.category = request.POST.get("category")
+        product.description = request.POST.get("description")
+        product.game_price = request.POST.get("game_price")
+
+        if request.FILES.get("game_image"):
+            product.game_image = request.FILES.get("game_image")
+
+        product.save()
+
+        # ⚡ Regenerate embeddings
+        from .vector_utils import generate_embeddings_for_all_games
+        generate_embeddings_for_all_games(gamedetails)
+
+        return redirect("viewproduct")
+
+    return render(request, "updateview.html", {"product": product})
+
+
+def viewproductdelet(request, pk):
+    product = get_object_or_404(gamedetails, pk=pk)
+    product.delete()
+
+    from .vector_utils import generate_embeddings_for_all_games
+    generate_embeddings_for_all_games(gamedetails)
+
+    return redirect("viewproduct")
+
+
+# ==========================================================
 # USER AUTH
-# =========================
+# ==========================================================
 
 def register(request):
     if request.method == "POST":
+
         username = request.POST.get("username")
         email = request.POST.get("email")
         password = request.POST.get("password")
@@ -92,14 +130,14 @@ def register(request):
             messages.error(request, "Username already exists")
             return redirect("register")
 
-        user = User.objects.create_user(username=username, email=email, password=password)
-        user.save()
-
+        User.objects.create_user(username=username, email=email, password=password)
         messages.success(request, "Account created successfully")
         return redirect("login")
 
     return render(request, "user/register.html")
 
+
+from django.contrib import messages
 
 def user_login(request):
     if request.method == "POST":
@@ -111,60 +149,74 @@ def user_login(request):
 
         if user:
             auth_login(request, user)
+            messages.success(request, "Welcome back 👋")
             return redirect("userpage")
 
         messages.error(request, "Invalid credentials")
 
     return render(request, "user/login.html")
 
-
-# =========================
-# STORE
-# =========================
-
+# ==========================================================
+# STORE (AI ENABLED)
+# ==========================================================
+from .vector_utils import semantic_search
+from .models import gamedetails, Library
 def userpage(request, category=None):
-    query = request.GET.get("q", "")
 
+    query = request.GET.get("q", "")
     products = gamedetails.objects.all()
 
+    # Category filter
     if category:
         products = products.filter(category=category)
 
+    # 🔥 Semantic Search
     if query:
-        products = products.filter(name__icontains=query)
+      products = semantic_search(query, gamedetails)
+    if category:
+        products = products.filter(category=category)
+
+    # 🔥 Personalized AI Recommendations
+    recommended = []
+    if request.user.is_authenticated:
+        recommended = recommend_for_user(
+            request.user,
+            gamedetails,
+            Library
+        )
 
     return render(request, "user/userpage.html", {
         "products": products,
+        "recommended": recommended,
         "categories": gamedetails.CATEGORY_CHOICE,
         "active_category": category,
         "search_query": query,
     })
 
-
 @login_required
 def game_detail(request, id):
+
     game = get_object_or_404(gamedetails, id=id)
 
-    in_cart = Cart.objects.filter(user=request.user, game=game).exists()
-    owned = Library.objects.filter(user=request.user, game=game).exists()
+    # 🔥 Similar Games AI
+    similar_games = recommend_similar_games(game, gamedetails)
 
     return render(request, "user/game_detail.html", {
         "game": game,
-        "in_cart": in_cart,
-        "owned": owned,
+        "similar_games": similar_games,
     })
 
 
-# =========================
+# ==========================================================
 # CART
-# =========================
+# ==========================================================
 
 @login_required
 def add_to_cart(request, game_id):
     game = get_object_or_404(gamedetails, id=game_id)
     Cart.objects.get_or_create(user=request.user, game=game)
+    messages.success(request, f"{game.name} added to cart 🛒")
     return redirect("view_cart")
-
 
 @login_required
 def view_cart(request):
@@ -178,9 +230,9 @@ def remove_from_cart(request, game_id):
     return redirect("view_cart")
 
 
-# =========================
+# ==========================================================
 # WISHLIST
-# =========================
+# ==========================================================
 
 @login_required
 def add_to_wishlist(request, game_id):
@@ -201,12 +253,13 @@ def remove_from_wishlist(request, game_id):
     return redirect("view_wishlist")
 
 
-# =========================
-# CHECKOUT (IMPORTANT)
-# =========================
+# ==========================================================
+# CHECKOUT
+# ==========================================================
 
 @login_required
 def checkout(request, game_id):
+
     game = get_object_or_404(gamedetails, id=game_id)
 
     if Library.objects.filter(user=request.user, game=game).exists():
@@ -223,9 +276,9 @@ def checkout(request, game_id):
     return render(request, "user/checkout.html", {"game": game})
 
 
-# =========================
+# ==========================================================
 # LIBRARY
-# =========================
+# ==========================================================
 
 @login_required
 def library(request):
@@ -233,51 +286,25 @@ def library(request):
     return render(request, "user/library.html", {"games": games})
 
 
-# =========================
+# ==========================================================
 # PROFILE
-# =========================
+# ==========================================================
 
 @login_required
 def user_profile(request):
     profile, _ = UserProfile.objects.get_or_create(user=request.user)
-    return render(request, "user/profile.html", {"profile": profile})
 
+    games_owned = Library.objects.filter(user=request.user).count()
+    wishlist_count = Wishlist.objects.filter(user=request.user).count()
+    cart_count = Cart.objects.filter(user=request.user).count()
 
-def viewproductupdate(request, pk):
-    product = get_object_or_404(gamedetails, pk=pk)
-
-    if request.method == 'POST':
-        product.name = request.POST.get('name')
-        product.category = request.POST.get('category')
-        product.description = request.POST.get('description')
-        product.game_price = request.POST.get('game_price')
-        product.genre = request.POST.get("genre")
-        product.developer = request.POST.get("developer")
-        product.rating = request.POST.get("rating")
-        product.release_date = request.POST.get("release_date")
-        product.players = request.POST.get("players")
-        product.storage_required = request.POST.get("storage_required")
-
-
-        if request.FILES.get('game_image'):
-            product.game_image = request.FILES.get('game_image')
-
-        product.save()
-        return redirect('viewproduct')
-
-    return render(request, 'updateview.html', {'product': product})
-
-
-def viewproductdelet(request, pk):
-    product = get_object_or_404(gamedetails, pk=pk)
-    product.delete()
-    return redirect('viewproduct')
-
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, redirect
-from .models import gamedetails
+    return render(request, "user/profile.html", {
+        "profile": profile,
+        "games_owned": games_owned,
+        "wishlist_count": wishlist_count,
+        "cart_count": cart_count,
+    })
 
 @login_required
 def buy_now(request, game_id):
-    game = get_object_or_404(gamedetails, id=game_id)
-    return redirect('checkout', game_id=game.id)
+    return redirect("checkout", game_id=game_id)

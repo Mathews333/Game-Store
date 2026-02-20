@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Game Store{% endblock %}</title>
+
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="{% static 'global.css' %}">
+
+    <!-- Page Specific CSS -->
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<header class="navbar">
+    <div class="logo">🎮 GameStore</div>
+    <nav>
+        <a href="{% url 'userpage' %}">Store</a>
+        <a href="{% url 'library' %}">Library</a>
+        <a href="{% url 'user_profile' %}">Profile</a>
+        <a href="{% url 'login' %}">Logout</a>
+    </nav>
+</header>
+
+<!-- ================= TOASTS ================= -->
+<div class="toast-container">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="toast {{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
+
+<!-- ================= PAGE CONTENT ================= -->
+<main>
+    {% block content %}
+    {% endblock %}
+</main>
+
+<!-- Auto-remove toast -->
+<script>
+setTimeout(() => {
+    document.querySelectorAll('.toast').forEach(toast => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(120%)';
+        setTimeout(() => toast.remove(), 400);
+    });
+}, 4000);
+</script>
+
+{% block extra_js %}{% endblock %}
+
+</body>
+</html>
