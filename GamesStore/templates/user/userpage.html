@@ -27,11 +27,14 @@
         <button type="submit">🔍</button>
     </form>
 
-    <nav>
-        <a href="{% url 'userpage' %}">Store</a>
-        <a href="{% url 'user_profile' %}">Profile</a>
-        <a href="{% url 'login' %}">Logout</a>
-    </nav>
+<nav>
+    <a href="{% url 'userpage' %}">Store</a>
+    <a href="{% url 'library' %}">Library</a>
+    <a href="{% url 'view_wishlist' %}">Wishlist</a>
+    <a href="{% url 'view_cart' %}">Cart</a>
+    <a href="{% url 'user_profile' %}">Profile</a>
+    <a href="{% url 'login' %}">Logout</a>
+</nav>
 </header>
 
 <!-- ================= MAIN LAYOUT ================= -->

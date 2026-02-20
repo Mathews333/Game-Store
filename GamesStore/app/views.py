@@ -3,6 +3,9 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+import razorpay
+from django.conf import settings
+from django.http import JsonResponse                        
 
 from .models import (
     gamedetails,
@@ -18,7 +21,8 @@ from .vector_utils import (
     recommend_for_user
 )
 
-from .vector_utils import semantic_search, generate_embeddings_for_all_games
+# from .vector_utils import semantic_search, generate_embeddings_for_all_games
+from .vector_utils import semantic_search
 
 # ==========================================================
 # ADMIN
@@ -156,29 +160,25 @@ def user_login(request):
 
     return render(request, "user/login.html")
 
-# ==========================================================
-# STORE (AI ENABLED)
-# ==========================================================
 from .vector_utils import semantic_search
 from .models import gamedetails, Library
+
 def userpage(request, category=None):
 
     query = request.GET.get("q", "")
     products = gamedetails.objects.all()
 
-    # Category filter
-    if category:
-        products = products.filter(category=category)
-
-    # 🔥 Semantic Search
     if query:
-      products = semantic_search(query, gamedetails)
-    if category:
-        products = products.filter(category=category)
+        products = semantic_search(query, gamedetails)
 
-    # 🔥 Personalized AI Recommendations
+    if category:
+        if isinstance(products, list):
+            products = [p for p in products if p.category == category]
+        else:
+            products = products.filter(category=category)
+
     recommended = []
-    if request.user.is_authenticated:
+    if request.user.is_authenticated and not query:
         recommended = recommend_for_user(
             request.user,
             gamedetails,
@@ -192,7 +192,9 @@ def userpage(request, category=None):
         "active_category": category,
         "search_query": query,
     })
+    
 
+    
 @login_required
 def game_detail(request, id):
 
@@ -266,14 +268,36 @@ def checkout(request, game_id):
         messages.info(request, "You already own this game.")
         return redirect("library")
 
-    if request.method == "POST":
-        Library.objects.create(user=request.user, game=game)
-        Cart.objects.filter(user=request.user, game=game).delete()
+    client = razorpay.Client(
+        auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET)
+    )
 
-        messages.success(request, "Purchase successful!")
-        return redirect("library")
+    # Create Razorpay Order
+    order = client.order.create({
+        "amount": game.game_price * 100,  # Razorpay works in paise
+        "currency": "INR",
+        "payment_capture": 1
+    })
 
-    return render(request, "user/checkout.html", {"game": game})
+    return render(request, "user/checkout.html", {
+        "game": game,
+        "razorpay_order_id": order["id"],
+        "razorpay_key_id": settings.RAZORPAY_KEY_ID,
+    })
+    
+    
+@login_required
+def payment_success(request, game_id):
+
+    game = get_object_or_404(gamedetails, id=game_id)
+
+    Library.objects.create(user=request.user, game=game)
+
+    Cart.objects.filter(user=request.user, game=game).delete()
+
+    messages.success(request, "Payment successful! Game added to your library.")
+
+    return redirect("library")
 
 
 # ==========================================================

@@ -1,10 +1,36 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Library | GameStore</title>
-</head>
-<body style="background:#0b1320; color:white; padding:40px;">
-    <h1>Your Library</h1>
-    <p>Purchased games will appear here.</p>
-</body>
-</html>
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Library | Game Store{% endblock %}
+
+{% block content %}
+
+<div class="store-main">
+
+    <h2 class="title">🎮 Your Library</h2>
+
+    <div class="game-grid">
+        {% for item in games %}
+        <div class="game-card">
+
+            {% if item.game.game_image %}
+            <a href="{% url 'game_detail' item.game.id %}">
+                <img src="{{ item.game.game_image.url }}">
+            </a>
+            {% endif %}
+
+            <div class="game-info">
+                <h3>{{ item.game.name }}</h3>
+                <p class="category">{{ item.game.get_category_display }}</p>
+                <p class="price">Owned</p>
+            </div>
+
+        </div>
+        {% empty %}
+            <p>You have not purchased any games yet.</p>
+        {% endfor %}
+    </div>
+
+</div>
+
+{% endblock %}

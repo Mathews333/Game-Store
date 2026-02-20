@@ -208,3 +208,19 @@ body {
 .empty-msg {
     color: #94a3b8;
 }
+
+/* Make stat cards clickable without changing design */
+.stat-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.stat-card {
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+}

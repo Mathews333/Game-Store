@@ -43,12 +43,11 @@
                 <label>Email Address</label>
                 <input
                     type="email"
-                    name="email"
-                    placeholder="you@example.com"
-                    required
+                    value="{{ request.user.email }}"
+                    readonly
                 >
                 <small class="hint">
-                    Your receipt and purchase confirmation will be sent here.
+                    Receipt will be sent to this email.
                 </small>
             </div>
 
@@ -56,21 +55,9 @@
                 <label>Full Name</label>
                 <input
                     type="text"
-                    name="name"
-                    placeholder="Your full name"
+                    value="{{ request.user.username }}"
+                    readonly
                 >
-            </div>
-
-            <div class="form-group">
-                <label>Country</label>
-                <select name="country">
-                    <option value="">Select country</option>
-                    <option>India</option>
-                    <option>United States</option>
-                    <option>United Kingdom</option>
-                    <option>Canada</option>
-                    <option>Germany</option>
-                </select>
             </div>
         </div>
 
@@ -86,21 +73,45 @@
             </div>
         </div>
 
-        <!-- CONFIRM -->
-        <form method="post">
-            {% csrf_token %}
-            <button type="submit" class="confirm-btn">
-                Confirm Purchase
-            </button>
-        </form>
+        <!-- RAZORPAY BUTTON -->
+        <button id="rzp-button" class="confirm-btn">
+            Pay ₹ {{ game.game_price }}
+        </button>
 
         <p class="demo-text">
-            This is a demo checkout. No real payment is processed.
+            Secure payment powered by Razorpay.
         </p>
 
     </div>
 
 </main>
+
+<!-- RAZORPAY SCRIPT -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+var options = {
+    "key": "{{ razorpay_key_id }}",
+    "amount": "{{ game.game_price }}00",
+    "currency": "INR",
+    "name": "GameStore",
+    "description": "{{ game.name }}",
+    "order_id": "{{ razorpay_order_id }}",
+    "handler": function (response){
+        window.location.href = "{% url 'payment_success' game.id %}";
+    },
+    "theme": {
+        "color": "#00bcd4"
+    }
+};
+
+var rzp = new Razorpay(options);
+
+document.getElementById('rzp-button').onclick = function(e){
+    rzp.open();
+    e.preventDefault();
+}
+</script>
 
 </body>
 </html>

@@ -23,14 +23,45 @@ from app import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('adminlogin/', views.adminlogin),
-    path('adminpage/', views.adminpage),
-    path('manage/', views.manageproduct),
-    path('addproduct/', views.addproduct),
-    path('viewproduct/', views.viewproduct),
-    path('update/<int:pk>',views.viewproductupdate, name='update'),
-    path('delete/<int:pk>', views.viewproductdelet, name='delete'),
-    path('reg/', views.register)
+
+    # ADMIN
+    path('adminlogin/', views.adminlogin, name='adminlogin'),
+    path('adminpage/', views.adminpage, name='adminpage'),
+    path('manage/', views.manageproduct, name='manage'),
+    path('addproduct/', views.addproduct, name='addproduct'),
+    path('viewproduct/', views.viewproduct, name='viewproduct'),
+    path('update/<int:pk>/', views.viewproductupdate, name='update'),
+    path('delete/<int:pk>/', views.viewproductdelet, name='delete'),
+
+    # AUTH
+    path('register/', views.register, name='register'),
+    path('login/', views.user_login, name='login'),
+
+    # STORE
+    path('store/', views.userpage, name='userpage'),
+    path('store/<str:category>/', views.userpage, name='filter_category'),
+
+    # GAME DETAIL
+    path('game/<int:id>/', views.game_detail, name='game_detail'),
+
+    # CART
+    path('cart/', views.view_cart, name='view_cart'),
+    path('cart/add/<int:game_id>/', views.add_to_cart, name='add_to_cart'),
+    path('cart/remove/<int:game_id>/', views.remove_from_cart, name='remove_from_cart'),
+
+    # WISHLIST
+    path('wishlist/', views.view_wishlist, name='view_wishlist'),
+    path('wishlist/add/<int:game_id>/', views.add_to_wishlist, name='add_to_wishlist'),
+    path('wishlist/remove/<int:game_id>/', views.remove_from_wishlist, name='remove_from_wishlist'),
+
+    # LIBRARY
+    path('library/', views.library, name='library'),
+
+    # PROFILE
+    path('profile/', views.user_profile, name='user_profile'),
+
+    # BUY NOW
+    path('buy/<int:game_id>/', views.buy_now, name='buy_now'),
 ]
 
 

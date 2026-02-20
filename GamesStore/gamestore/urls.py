@@ -43,8 +43,8 @@ urlpatterns = [
     path('store/category/<str:category>/', views.userpage, name='filter_category'),
     
     # path('buy/<int:game_id>/', views.buy_now, name='buy_now'),
-  path('checkout/<int:game_id>/', views.checkout, name='checkout'),
-  
+    path('checkout/<int:game_id>/', views.checkout, name='checkout'),
+    path('payment-success/<int:game_id>/', views.payment_success, name='payment_success'),      
     path('library/', views.library, name='library'),
 
 

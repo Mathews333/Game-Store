@@ -1,91 +1,86 @@
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+vectorizer = None
+game_vectors = None
+game_ids = None
 
-def generate_embeddings_for_all_games(GameModel):
+# def generate_embeddings_for_all_games(GameModel):
 
-    games = list(GameModel.objects.all())
+#     games = list(GameModel.objects.all())
 
-    if not games:
-        print("No games found.")
-        return
+#     if not games:
+#         print("No games found.")
+#         return
 
-    corpus = []
+#     corpus = []
 
-    for game in games:
-        text = f"{game.name} {game.get_category_display()} {game.description}"
-        corpus.append(text)
+#     for game in games:
+#         text = f"{game.name} {game.get_category_display()} {game.description}"
+#         corpus.append(text)
 
-    vectorizer = TfidfVectorizer(stop_words='english')
-    tfidf_matrix = vectorizer.fit_transform(corpus)
+#     vectorizer = TfidfVectorizer(stop_words='english')
+#     tfidf_matrix = vectorizer.fit_transform(corpus)
 
-    for i, game in enumerate(games):
-        game.embedding = tfidf_matrix[i].toarray()[0].tolist()
-        game.save()
+#     for i, game in enumerate(games):
+#         game.embedding = tfidf_matrix[i].toarray()[0].tolist()
+#         game.save()
 
-    print("Embeddings generated and saved successfully.")
+#     print("Embeddings generated and saved successfully.")
 
 
 def recommend_similar_games(target_game, GameModel, top_n=4):
+    global vectorizer, game_vectors, game_ids
 
-    if not target_game.embedding:
-        return []
+    if vectorizer is None:
+        generate_embeddings_for_all_games(GameModel)
 
-    target_vector = np.array(target_game.embedding).reshape(1, -1)
+    target_text = f"{target_game.name} {target_game.description} {target_game.category}"
+    target_vector = vectorizer.transform([target_text])
 
-    all_games = GameModel.objects.exclude(id=target_game.id)
+    similarities = cosine_similarity(target_vector, game_vectors)[0]
 
-    similarities = []
+    top_indices = np.argsort(similarities)[::-1][1:top_n+1]
 
-    for game in all_games:
-        if not game.embedding:
-            continue
+    top_ids = [game_ids[i] for i in top_indices]
 
-        game_vector = np.array(game.embedding).reshape(1, -1)
-
-        score = cosine_similarity(target_vector, game_vector)[0][0]
-        similarities.append((game, score))
-
-    similarities.sort(key=lambda x: x[1], reverse=True)
-
-    return [game for game, score in similarities[:top_n]]
+    return GameModel.objects.filter(id__in=top_ids)
 
 def recommend_for_user(user, GameModel, LibraryModel, top_n=6):
+    global vectorizer, game_vectors, game_ids
 
     owned = LibraryModel.objects.filter(user=user)
 
     if not owned.exists():
         return []
 
-    owned_vectors = []
+    if vectorizer is None:
+        generate_embeddings_for_all_games(GameModel)
 
-    for item in owned:
-        if item.game.embedding:
-            owned_vectors.append(np.array(item.game.embedding))
+    owned_texts = [
+        f"{item.game.name} {item.game.description} {item.game.category}"
+        for item in owned
+    ]
 
-    if not owned_vectors:
-        return []
+    owned_vector = np.asarray(
+    vectorizer.transform(owned_texts).mean(axis=0)
+)
 
-    user_vector = np.mean(owned_vectors, axis=0).reshape(1, -1)
+    similarities = cosine_similarity(owned_vector, game_vectors)[0]
+
+    top_indices = np.argsort(similarities)[::-1]
+
+    owned_ids = owned.values_list("game_id", flat=True)
 
     recommendations = []
 
-    for game in GameModel.objects.all():
+    for i in top_indices:
+        if game_ids[i] not in owned_ids:
+            recommendations.append(game_ids[i])
+        if len(recommendations) >= top_n:
+            break
 
-        if owned.filter(game=game).exists():
-            continue
-
-        if not game.embedding:
-            continue
-
-        game_vector = np.array(game.embedding).reshape(1, -1)
-
-        score = cosine_similarity(user_vector, game_vector)[0][0]
-        recommendations.append((game, score))
-
-    recommendations.sort(key=lambda x: x[1], reverse=True)
-
-    return [game for game, score in recommendations[:top_n]]
+    return GameModel.objects.filter(id__in=recommendations)
 
 vectorizer = None
 game_vectors = None
@@ -110,7 +105,10 @@ def generate_embeddings_for_all_games(GameModel):
 
 def semantic_search(query, GameModel, top_k=12):
     global vectorizer, game_vectors, game_ids
+    
+    print("Semantic search triggered with query:", query)
 
+    # Generate embeddings once
     if vectorizer is None:
         generate_embeddings_for_all_games(GameModel)
 
@@ -122,4 +120,10 @@ def semantic_search(query, GameModel, top_k=12):
 
     top_ids = [game_ids[i] for i in top_indices]
 
-    return GameModel.objects.filter(id__in=top_ids)
+    # Preserve similarity order
+    preserved_order = sorted(
+        GameModel.objects.filter(id__in=top_ids),
+        key=lambda x: top_ids.index(x.id)
+    )
+
+    return preserved_order

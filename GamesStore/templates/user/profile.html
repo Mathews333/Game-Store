@@ -11,6 +11,7 @@
 
 <div class="profile-container">
 
+    <!-- LEFT PROFILE CARD -->
     <section class="profile-card">
         <div class="avatar-circle">🎮</div>
         <h2>{{ request.user.username }}</h2>
@@ -21,23 +22,36 @@
         </p>
     </section>
 
+    <!-- RIGHT CONTENT -->
     <section class="profile-content">
 
+        <!-- STATS GRID -->
         <div class="stats-grid">
-            <div class="stat-card">
-                <h3>{{ games_owned }}</h3>
-                <p>Games Owned</p>
-            </div>
-            <div class="stat-card">
-                <h3>{{ wishlist_count }}</h3>
-                <p>Wishlist</p>
-            </div>
-            <div class="stat-card">
-                <h3>{{ cart_count }}</h3>
-                <p>Cart Items</p>
-            </div>
+
+            <a href="{% url 'library' %}" class="stat-link">
+                <div class="stat-card">
+                    <h3>{{ games_owned }}</h3>
+                    <p>Games Owned</p>
+                </div>
+            </a>
+
+            <a href="{% url 'view_wishlist' %}" class="stat-link">
+                <div class="stat-card">
+                    <h3>{{ wishlist_count }}</h3>
+                    <p>Wishlist</p>
+                </div>
+            </a>
+
+            <a href="{% url 'view_cart' %}" class="stat-link">
+                <div class="stat-card">
+                    <h3>{{ cart_count }}</h3>
+                    <p>Cart Items</p>
+                </div>
+            </a>
+
         </div>
 
+        <!-- GAMING DNA -->
         <div class="dna-section">
             <h3>Your Gaming Focus</h3>
             <div class="dna-bar">
@@ -46,6 +60,7 @@
             <p>Action / RPG Preference</p>
         </div>
 
+        <!-- RECENTLY PLAYED -->
         <div class="recent-section">
             <h3>Recently Played</h3>
             <div class="recent-grid">

@@ -1,43 +1,38 @@
 {% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html>
-<head>
-    <title>My Wishlist</title>
-    <link rel="stylesheet" href="{% static 'user/wishlist.css' %}">
 
-</head>
-<body>
+{% block content %}
 
-<h2>❤️ My Wishlist</h2>
+<div class="store-main">
+    <h2 class="title">❤️ My Wishlist</h2>
 
-{% if items %}
-<table border="1" cellpadding="10">
-    <tr>
-        <th>Game</th>
-        <th>Price</th>
-        <th>Action</th>
-    </tr>
+    <div class="game-grid">
+        {% for item in items %}
+        <div class="game-card">
 
-    {% for item in items %}
-    <tr>
-        <td>{{ item.game.name }}</td>
-        <td>₹{{ item.game.game_price }}</td>
-        <td>
-            <a href="{% url 'remove_from_wishlist' item.game.id %}">
-                Remove
+            {% if item.game.game_image %}
+            <a href="{% url 'game_detail' item.game.id %}">
+                <img src="{{ item.game.game_image.url }}">
             </a>
-        </td>
-    </tr>
-    {% endfor %}
-</table>
+            {% endif %}
 
-{% else %}
-<p>Your wishlist is empty.</p>
-{% endif %}
+            <div class="game-info">
+                <h3>{{ item.game.name }}</h3>
+                <p class="category">{{ item.game.get_category_display }}</p>
+                <p class="price">₹ {{ item.game.game_price }}</p>
 
-<br>
-<a href="{% url 'userpage' %}">⬅ Back to Store</a>
+                <a href="{% url 'remove_from_wishlist' item.game.id %}"
+                   style="color:#ff4d4d; font-weight:600;">
+                   Remove
+                </a>
+            </div>
 
-</body>
-</html>
+        </div>
+        {% empty %}
+            <p>No games in wishlist.</p>
+        {% endfor %}
+    </div>
+
+</div>
+
+{% endblock %}
